@@ -1,5 +1,4 @@
 import random
-from re import search
 def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit):
 
     def Search(map):
