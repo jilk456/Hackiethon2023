@@ -3,6 +3,18 @@ import random
 def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     def Search():
         print("searching")
+        highestX = 0
+        highestY = 0
+        highestProb = 0
+        for x in range(10):
+            for y in range(10):
+                if ((x%2 == 0)and(y%2==0)) or ((x%2!=0) and (y%2!=0)):
+                    if (probabilityGrid[x][y] > highestProb) and (map[x][y] == 0):
+                        highestX = x
+                        highestY = y
+                        highestProb = highestProb
+        return [highestX, highestY]
+
         
     def Hunt():
         print("hunting")
@@ -53,6 +65,16 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,]]
+        for x in range(10):
+            for y in range(10):
+                for shiplength in ships:
+                    if checkIfFits(shiplength, "alongX", x, y):
+                        for num in range(shiplength):
+                            probabilityGrid[x+num][y]+=1
+                    if checkIfFits(shiplength, "alongY", x, y):
+                        for num in range(shiplength):
+                            probabilityGrid[x][y+num]+=1
+        return probabilityGrid
     
         #Generates a map if there isn't one yet. 1 = hit, -1 = miss, 0 = unchecked
     if not storage:
@@ -69,6 +91,7 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     else:
         map = storage
 
+    probabilityGrid = makeProbabilityGrid()
 
 
     x = 5
