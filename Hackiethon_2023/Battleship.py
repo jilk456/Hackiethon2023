@@ -1,33 +1,36 @@
 import random
+from re import X, search
 
 def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     def Search():
         print("searching")
         
-    def Hunt():
-        print("hunting")
-        x = p1ShotSeq[-1][0]
-        y = p1ShotSeq[-1][1]
-        print(str([x,y]) + " this is the hunt call")
+    def Hunt(xPos, yPos):
+        searchfail = False
         for i in range(4):
             if i == 0:
-                if (x + 1) < 10 and storage[x + 1][y] == 0:
-                    x += 1
+                if (xPos + 1) < 10 and storage[xPos + 1][yPos] == 0:
+                    xPos += 1
                     break 
             elif i == 1:
-                if (x - 1) > -1 and storage[x - 1][y] == 0:
-                    x -= 1
+                if (xPos - 1) > -1 and storage[xPos - 1][yPos] == 0:
+                    xPos -= 1
                     break 
             elif i == 2:
-                if (y + 1) < 10 and storage[x][y + 1] == 0:
-                    y += 1
+                if (yPos + 1) < 10 and storage[xPos][yPos + 1] == 0:
+                    yPos += 1
                     break 
             elif i == 3:
-                if (y - 1) > -1 and storage[x][y - 1] == 0:
-                    y -= 1
+                if (yPos - 1) > -1 and storage[x][yPos - 1] == 0:
+                    yPos -= 1
                     break 
             else:
-                Search()
+                searchfail = True
+        if searchfail == False:
+            return [xPos, yPos]
+        else:
+            print("womp womp")
+
 
 #Position refers to the coordinates of the top left
     def checkIfFits(shiplength, direction, positionX, positionY):
@@ -70,39 +73,30 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
         map = storage
 
 
-
-    x = 5
-    y = 5
     
-    #CHOOSE WHAT ALGO
-    if p1PrevHit == True:
-        #CHECK IF LAST HIT HAS EMPTY ADJACENT SQUARES
-        x = p1ShotSeq[-1][0]
-        y = p1ShotSeq[-1][1]
-        for i in range(4):
-            if i == 0:
-                if (x + 1) < 10 and storage[x + 1][y] == 0:
-                    Hunt()
-                    break 
-            elif i == 1:
-                if (x - 1) > -1 and storage[x - 1][y] == 0:
-                    Hunt()
-                    break 
-            elif i == 2:
-                if (y + 1) < 10 and storage[x][y + 1] == 0:
-                    Hunt()
-                    break 
-            elif i == 3:
-                if (y - 1) > -1 and storage[x][y - 1] == 0:
-                    Hunt()
-                    break 
-            else:
-                Search()
-    else:
-        Search()
+#CHOOSE ALGORITHM
+    hitsList = []
+    huntingFind = False
+    for xlist in range(len(map)):
+        for ylist in range(len(map[xlist])):
+            if map[xlist][ylist] == 1:
+                hitsList.append([map[xlist], map[xlist][ylist]])
+
+    for i in range(len(hitsList)):
+        if Hunt(hitsList[i][0],hitsList[i][1]) != "Fail":
+            x = hitsList[i][0]
+            y = hitsList[i][1]
+            huntingFind = True
+            break
+    if huntingFind == False:
+        searchResult = Search()
+        x = searchResult[0]
+        y = searchResult[1]
+ 
+ 
 
 
-    return [x,y], map
+    return [x + 1, y + 1], map
 
 
 print(ShipLogic(1, 1, 15, 15, [[0,0],[5,2],[1,8],[9,4]], True, None))
