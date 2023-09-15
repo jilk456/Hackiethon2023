@@ -25,4 +25,6 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit):
     y = random.randint(1,10)
     return [x,y] 
 
-ShipLogic(1,1,1,1,1,1)
+    # Generating a map for the enemy
+    enemyMap = [0,0,0,0]
+    
