@@ -54,6 +54,8 @@ mapCols = 10
 yourHp = sum(shipSizeArr)   # 1 five block, 2 three block, 2 two block
 enemyHp = sum(shipSizeArr)    
 round = 1 
+p1storage = []
+p2storage = []
 
  # -------------------------------------------------------------- #
     #               Ship Positions/Coordinates                       #
@@ -111,7 +113,7 @@ while yourHp > 0 or enemyHp > 0:
     #-------------------------------------#
 
     # Assume we storing every coord a ship is covering 
-    p1Bomb = p1.ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit)
+    p1Bomb = p1.ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, p1storage)
     # convert coord from [1-10] to [0-9]
     bombX = p1Bomb[0]-1
     bombY = p1Bomb[1]-1
