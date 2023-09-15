@@ -2,46 +2,55 @@ import random
 from re import X, search
 
 def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
-    def Search():
+    def Search(map):
         print("searching")
+        probabilityGrid = makeProbabilityGrid()
         highestX = 0
         highestY = 0
         highestProb = 0
+        for i in range(10):
+            print(probabilityGrid[i])
         for x in range(10):
             for y in range(10):
                 if ((x%2 == 0)and(y%2==0)) or ((x%2!=0) and (y%2!=0)):
                     if (probabilityGrid[x][y] > highestProb) and (map[x][y] == 0):
                         highestX = x
                         highestY = y
-                        highestProb = highestProb
+                        highestProb = probabilityGrid[x][y]
+        print("Highest probability =",highestProb)
         return [highestX, highestY]
 
         
     def Hunt(xPos, yPos):
-        searchfail = False
+        #print("hunting")
+        searchfind = False
         for i in range(4):
             if i == 0:
-                if (xPos + 1) < 10 and storage[xPos + 1][yPos] == 0:
+                if ((xPos + 1) < 10) and (storage[xPos + 1][yPos]) == 0:
                     xPos += 1
-                    break 
+                    searchfind = True
+                    continue
             elif i == 1:
                 if (xPos - 1) > -1 and storage[xPos - 1][yPos] == 0:
                     xPos -= 1
-                    break 
+                    searchfind = True
+                    continue
             elif i == 2:
                 if (yPos + 1) < 10 and storage[xPos][yPos + 1] == 0:
                     yPos += 1
-                    break 
+                    searchfind = True
+                    continue 
             elif i == 3:
-                if (yPos - 1) > -1 and storage[x][yPos - 1] == 0:
+                if (yPos - 1) > -1 and storage[xPos][yPos - 1] == 0:
                     yPos -= 1
-                    break 
-            else:
-                searchfail = True
-        if searchfail == False:
+                    searchfind = True
+                    continue 
+
+        print(searchfind)
+        if searchfind == True:
             return [xPos, yPos]
         else:
-            print("womp womp")
+            return "womp womp"
 
 
 #Position refers to the coordinates of the top left
@@ -94,8 +103,16 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     else:
         map = storage
 
-    probabilityGrid = makeProbabilityGrid()
 
+    #If not first move, sends info of whether last move was a hit to map
+    if p1ShotSeq:
+        xPrev = p1ShotSeq[-1][0] - 1
+        yPrev = p1ShotSeq[-1][1] - 1
+
+        if p1PrevHit:
+            map[xPrev][yPrev] = 1
+        else:
+            map[xPrev][yPrev] = -1
     
 #CHOOSE ALGORITHM
     hitsList = []
@@ -103,23 +120,24 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     for xlist in range(len(map)):
         for ylist in range(len(map[xlist])):
             if map[xlist][ylist] == 1:
-                hitsList.append([map[xlist], map[xlist][ylist]])
+                hitsList.append([xlist, ylist])
+    print(hitsList)
 
     for i in range(len(hitsList)):
-        if Hunt(hitsList[i][0],hitsList[i][1]) != "Fail":
-            x = hitsList[i][0]
-            y = hitsList[i][1]
+        test = Hunt(hitsList[i][0],hitsList[i][1])
+        if test != "womp womp":
+            x = test[0]
+            y = test[1]
             huntingFind = True
-            break
+            #print([x, y])
+            continue
     if huntingFind == False:
-        searchResult = Search()
+        searchResult = Search(map)
         x = searchResult[0]
         y = searchResult[1]
- 
- 
+        #print([x, y])
+    
+
 
 
     return [x + 1, y + 1], map
-
-
-print(ShipLogic(1, 1, 15, 15, [[0,0],[5,2],[1,8],[9,4]], True, None))
