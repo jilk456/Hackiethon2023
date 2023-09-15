@@ -9,6 +9,12 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit):
     def Hunt(lasthit):
         lasthit = lasthit
 
+    # Generating a map for the enemy
+    def makeEnemyMap():
+        for x in 10:
+            for y in 10:
+                enemyMap[x][y] = 0
+
     #CHECK IF THERE ARE HITS WITH ADJACET EMPTY SQUARES
     if 1 == 1:
         Search("map")
