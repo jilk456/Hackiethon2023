@@ -3,7 +3,6 @@ from re import X, search
 
 def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
     def Search(map):
-        print("searching")
         probabilityGrid = makeProbabilityGrid()
         highestX = 0
         highestY = 0
@@ -17,7 +16,6 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
                         highestX = x
                         highestY = y
                         highestProb = probabilityGrid[x][y]
-        print("Highest probability =",highestProb)
         return [highestX, highestY]
 
         
@@ -45,8 +43,6 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
                     yPos -= 1
                     searchfind = True
                     continue 
-
-        print(searchfind)
         if searchfind == True:
             return [xPos, yPos]
         else:
@@ -60,7 +56,7 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
         else:
             requiredPositions = [[positionX,positionY+y] for y in range(shiplength)]
         for position in requiredPositions:
-            if not((position[0] < 10) and (position[1] < 10) and (map[position[0]][position[1]]!=1)):
+            if not((position[0] < 10) and (position[1] < 10) and (map[position[0]][position[1]]==0)):
                 return False
         return True
     
@@ -121,7 +117,6 @@ def ShipLogic(round, yourMap, yourHp, enemyHp, p1ShotSeq, p1PrevHit, storage):
         for ylist in range(len(map[xlist])):
             if map[xlist][ylist] == 1:
                 hitsList.append([xlist, ylist])
-    print(hitsList)
 
     for i in range(len(hitsList)):
         test = Hunt(hitsList[i][0],hitsList[i][1])
